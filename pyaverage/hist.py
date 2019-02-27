@@ -7,7 +7,7 @@ mpl.use('TkAgg')
 import matplotlib.pyplot as plt
 
 
-logging.basicConfig(level='DEBUG')
+#logging.basicConfig(level='DEBUG')
 logger = logging.getLogger(__name__)
 
 def generate_hist2d(xy, 
@@ -20,6 +20,7 @@ def generate_hist2d(xy,
     Generates 2D histogram using numpy with given px and shift.
     Returns histogram, limits
     '''
+    logger.debug(f'Generating hist2d')
     if px <=0: raise(ValueError(f'px must be positive number, got {px}'))
     logger.debug(f'data shape: {xy.shape}')
     assert xy.shape[0] > 0, 'data empty'
@@ -35,7 +36,7 @@ def generate_hist2d(xy,
     logger.debug(f'limits: {limits}')
     logger.debug(f'nbins: {bins}')
     
-    hist, xedges, yedges = np.histogram2d(x=xy[:,0].ravel(), y=xy[:,1].ravel(), bins=bins, range=limits)
+    hist, _, _ = np.histogram2d(x=xy[:,0].ravel(), y=xy[:,1].ravel(), bins=bins, range=limits)
     logger.debug(f'hist shape: {hist.shape}')
     while shift: 
         shift -= 1
@@ -77,3 +78,20 @@ def plot_hist(hist, limits_list, vmax=None, cmap='hot'):
         logger.error(f'limits: {limits_list}')
         return False
     
+def plot_hist_with_peaks(hist, 
+               peaks, 
+               markersize=5, 
+               color='r', 
+               show=True, 
+               figsize=10,
+               vmax=5, 
+               save=None):
+    logger.debug(f'Plot historgam with peaks')
+    plt.figure(figsize=(figsize,figsize))
+    plt.imshow(hist, vmax=vmax)
+    plt.plot(peaks[:,1], peaks[:,0], color+'.', markersize=markersize)
+    if show: plt.show()
+    if save: plt.savefig(save)
+    return True
+
+
