@@ -11,7 +11,9 @@ class TestReadCsv(TestCase):
     def setUp(self):
         self.test_csv_path = os.path.join('tests','test_fxy.csv')
         self.columns = ['frame', 'x [nm]', 'y [nm]']
-
+        if not os.path.exists(self.test_csv_path):
+            self.generate_test_table()
+        self.df = iot.read_csv_to_pandas(self.test_csv_path)
 
     def tearDown(self):
         self.rm_test_table()
@@ -29,8 +31,11 @@ class TestReadCsv(TestCase):
         
 
     def test_read_csv_to_pandas(self):
-        if not os.path.exists(self.test_csv_path):
-            self.generate_test_table()
-        df = iot.read_csv_to_pandas(self.test_csv_path)
-        self.assertIsInstance(df, pd.DataFrame)
-        self.assertListEqual(list(df.columns), self.columns)
+        self.assertIsInstance(self.df, pd.DataFrame)
+        self.assertListEqual(list(self.df.columns), self.columns)
+
+    def test_extract_xy_from_pandas(self):
+        xy = iot.get_xy_from_pandas(self.df, keys=['x [nm]', 'y [nm]'])
+        self.assertTupleEqual(xy.shape, (10,2))
+        
+
