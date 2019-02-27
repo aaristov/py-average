@@ -13,5 +13,14 @@ def open_csv(table_path):
         logger.error('Wrong path')
         return False
 
-
+def get_xy_from(pd_table: pd.DataFrame, keys=['x [nm]', 'y [nm]']):
+    """
+    Extracts xy columns from the table.
+    Input: 
+    pd_table – pandas DataFrame
+    keys – colunm titles
+    Returns:
+    numpy array
+    """
+    return pd_table[keys].values
     
