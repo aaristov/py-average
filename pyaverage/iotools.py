@@ -1,7 +1,7 @@
 import pandas as pd
 import logging
 
-logging.basicConfig(level='DEBUG')
+#logging.basicConfig(level='DEBUG')
 logger = logging.getLogger(__name__)
 
 def read_localization_table_from_disk(table_path: str, read_func):
@@ -14,7 +14,7 @@ def read_localization_table_from_disk(table_path: str, read_func):
         return table
     except IOError:
         logger.error('Wrong path')
-        return False
+        exit(1)
 
 def read_csv_to_pandas(path):
     return read_localization_table_from_disk(table_path=path, read_func=pd.read_csv)
